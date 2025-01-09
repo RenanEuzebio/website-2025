@@ -1,0 +1,2 @@
+"# Exelentic-2025"  initgit add README.mdgit commit -m "first commit"git branch -M maingit remote add origin https://github.com/RenanEuzebio/Exelentic-2025.gitgit push -u origin main
+"# Exelentic-2025"  initgit add README.mdgit commit -m "first commit"git branch -M maingit remote add origin https://github.com/RenanEuzebio/Exelentic-2025.gitgit push -u origin main
