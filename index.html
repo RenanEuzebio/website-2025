@@ -16,6 +16,11 @@
             box-sizing: border-box;
         }
 
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
         /* Navbar styles */
         .navbar {
             position: fixed;
@@ -322,7 +327,7 @@
 <!-- Navbar -->
 <nav class="navbar" id="navbar">
     <div class="logo">
-        <a href="#"><strong>Exelentic</strong></a>
+        <a href="#home"><strong>Exelentic</strong></a> <!-- Updated href to #home -->
     </div>
     <div class="nav-links">
         <a href="#home" data-key="navbar_home">Home</a>
@@ -470,6 +475,9 @@
     // Language switch button functionality
     const languageButton = document.getElementById('language-button');
 
+    // Flag to prevent navbar from hiding after a link click
+    let navbarClicked = false;
+
     // Retrieve saved language preference on load
     document.addEventListener('DOMContentLoaded', async () => {
         await loadTranslations();
@@ -483,6 +491,7 @@
         loadPages();
     });
 
+    // Language switch button event listener
     languageButton.addEventListener('click', function() {
         // Toggle language
         currentLanguage = (currentLanguage === 'de') ? 'en' : 'de';
@@ -494,16 +503,20 @@
         applyTranslations();
     });
 
-    // Auto-hiding Navbar Script
+    // Auto-hiding Navbar Script with click prevention
     let prevScrollPos = window.pageYOffset;
     window.onscroll = function() {
         const navbar = document.getElementById("navbar");
         let currentScrollPos = window.pageYOffset;
 
-        if (prevScrollPos > currentScrollPos) {
+        if (navbarClicked) {
             navbar.style.top = "0";
         } else {
-            navbar.style.top = "-100px";
+            if (prevScrollPos > currentScrollPos) {
+                navbar.style.top = "0";
+            } else {
+                navbar.style.top = "-100px";
+            }
         }
         prevScrollPos = currentScrollPos;
     };
@@ -534,6 +547,31 @@
                 break;
             }
         }
+    }
+
+    // Add event listeners to navbar links to set navbarClicked flag
+    const navLinks = document.querySelectorAll('.navbar .nav-links a');
+    navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            navbarClicked = true;
+            // Keep navbar visible for 1 second after click
+            setTimeout(() => {
+                navbarClicked = false;
+            }, 1000);
+        });
+    });
+
+    // Additional JavaScript to ensure scrolling to 'home' works
+    const homeLink = document.querySelector('.nav-links a[href="#home"]');
+    if (homeLink) {
+        homeLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            // Scroll to the top of the page
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
     }
 
     // Chatbot Script
